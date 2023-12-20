@@ -33,8 +33,7 @@ The interface is not thread safe.
 
 Any module which is invoking the API should ensure calls are made in a thread safe manner.
 
-Different 3rd party vendors allowed to create internal threads to meet the operational requirements. In this case 3rd party implementations
-should be responsible to synchronize between the calls, events and cleanup the thread.
+Vendors can create internal threads/events to meet their operation requirements.  These should be responsible to synchronize between the calls, events and cleaned up on closure.
 
 ## Process Model
 
@@ -43,9 +42,10 @@ All API's are expected to be called from multiple process.
 ## Memory Model
 
 The client is responsible to allocate and de-allocate memory for necessary API's as specified in API Documentation.
+Different 3rd party vendors allowed to allocate memory for internal operational requirements. In this case 3rd party implementations should be responsible to de-allocate internally.
 
-Different 3rd party vendors allowed to allocate memory for internal operational requirements. In this case 3rd party implementations
-should be responsible to de-allocate internally.
+[TODO]: # (State a footprint requirement. Example: This should not exceed XXXX KB.)
+
 
 ## Power Management Requirements
 
@@ -59,8 +59,9 @@ There are no asynchronous notifications.
 ## Blocking calls
 
 The API's are expected to work synchronously and should complete within a time period commensurate with the complexity of the operation and in accordance with any relevant specification.
-
 Any calls that can fail due to the lack of a response should have a timeout period in accordance with any API documentation.
+
+[TODO]: # (As we state that they should complete within a time period, we need to state what that time target is, and pull it from the spec if required. Define the timeout requirement.)
 
 ## Internal Error Handling
 
@@ -80,7 +81,7 @@ The component is should log all the error and critical informative messages whic
 
 The logging should be consistence across all HAL components.
 
-If the vendor is going to log then it has to be logged in `xxx_vendor_hal.log` file name.
+If the vendor is going to log then it has to be logged in `xxx_vendor_hal.log` file name which can be placed in `/rdklogs/logs/` directory.
 
 Logging should be defined with log levels as per Linux standard logging.
 
@@ -88,13 +89,11 @@ Logging should be defined with log levels as per Linux standard logging.
 
 The component should not contributing more to memory and CPU utilization while performing normal operations and commensurate with the operation required.
 
-
 ## Quality Control
 
-Lpa HAL implementation should pass `Coverity`, `Black duck`, `Valgrind` checks without any issue.
+MTA HAL implementation should pass checks using third party tools like `Coverity`, `Black duck`, `Valgrind` without any issue to ensure quality.
 
 There should not be any memory leaks/corruption introduced by HAL and underneath 3rd party software implementation.
-
 
 ## Licensing
 
@@ -106,7 +105,7 @@ The source code should be build under Linux Yocto environment and should be deli
   
 ## Variability Management
 
-Any new API introduced should be implemented by all the 3rd party module and RDK generic code should be compatible with specific version of HAL software
+Changes to the interface will be controlled by versioning, vendors will be expected to implement to a fixed version of the interface, and based on SLA agreements move to later versions as demand requires.
 
 Each API interface will be versioned using [Semantic Versioning 2.0.0](https://semver.org/), the vendor code will comply with a specific version of the interface.
 
@@ -125,7 +124,9 @@ All HAL function prototypes and datatype definitions are available in `lpa_hal.h
 
 Covered as per "Description" sections in the API documentation.
 
-#### Sequence Diagram
+### UML Diagrams
+
+## Sequence Diagram
 
 ```mermaid
 sequenceDiagram
