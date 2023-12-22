@@ -139,10 +139,6 @@ Caller->>Lpa HAL: cellular_esim_lpa_init()
 Lpa HAL->>Vendor: 
 Vendor ->>Lpa HAL: 
 Lpa HAL->>Caller: cellular_esim_lpa_init() return
-Caller->>Lpa HAL: cellular_esim_lpa_exit()
-Lpa HAL->>Vendor: 
-Vendor ->>Lpa HAL: 
-Lpa HAL->>Caller: cellular_esim_lpa_exit() return
 Caller->>Lpa HAL: cellular_esim_get_XXX()
 Lpa HAL->>Vendor: 
 Vendor ->>Lpa HAL: 
@@ -155,4 +151,8 @@ Caller->>Lpa HAL: cellular_esim_download_profile_XXX()
 Lpa HAL->>Vendor: 
 Vendor ->>Lpa HAL: 
 Lpa HAL->>Caller: cellular_esim_download_profile_XXX() return
+Caller->>Lpa HAL: cellular_esim_lpa_exit()
+Lpa HAL->>Vendor: 
+Vendor ->>Lpa HAL: 
+Lpa HAL->>Caller: cellular_esim_lpa_exit() return
 ```
