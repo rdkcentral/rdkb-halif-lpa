@@ -44,7 +44,8 @@ All API's are expected to be called from multiple process.
 The client is responsible to allocate and de-allocate memory for necessary API's as specified in API Documentation.
 Different 3rd party vendors allowed to allocate memory for internal operational requirements. In this case 3rd party implementations should be responsible to de-allocate internally.
 
-[TODO]: # (State a footprint requirement. Example: This should not exceed XXXX KB.)
+TODO:
+State a footprint requirement. Example: This should not exceed XXXX KB.
 
 
 ## Power Management Requirements
@@ -61,7 +62,8 @@ There are no asynchronous notifications.
 The API's are expected to work synchronously and should complete within a time period commensurate with the complexity of the operation and in accordance with any relevant specification.
 Any calls that can fail due to the lack of a response should have a timeout period in accordance with any API documentation.
 
-[TODO]: # (As we state that they should complete within a time period, we need to state what that time target is, and pull it from the spec if required. Define the timeout requirement.)
+TODO:
+As we state that they should complete within a time period, we need to state what that time target is, and pull it from the spec if required. Define the timeout requirement.
 
 ## Internal Error Handling
 
@@ -133,8 +135,24 @@ sequenceDiagram
 participant Caller
 participant Lpa HAL
 participant Vendor
-Caller->>Lpa HAL: Modem_XXX()
+Caller->>Lpa HAL: cellular_esim_lpa_init()
 Lpa HAL->>Vendor: 
 Vendor ->>Lpa HAL: 
-Lpa HAL->>Caller: Modem_XXX() return
+Lpa HAL->>Caller: cellular_esim_lpa_init() return
+Caller->>Lpa HAL: cellular_esim_lpa_exit()
+Lpa HAL->>Vendor: 
+Vendor ->>Lpa HAL: 
+Lpa HAL->>Caller: cellular_esim_lpa_exit() return
+Caller->>Lpa HAL: cellular_esim_get_XXX()
+Lpa HAL->>Vendor: 
+Vendor ->>Lpa HAL: 
+Lpa HAL->>Caller: cellular_esim_get_XXX() return
+Caller->>Lpa HAL: cellular_esim_XXXX_profile()
+Lpa HAL->>Vendor: 
+Vendor ->>Lpa HAL: 
+Lpa HAL->>Caller: cellular_esim_XXXX_profile() return
+Caller->>Lpa HAL: cellular_esim_download_profile_XXX()
+Lpa HAL->>Vendor: 
+Vendor ->>Lpa HAL: 
+Lpa HAL->>Caller: cellular_esim_download_profile_XXX() return
 ```
