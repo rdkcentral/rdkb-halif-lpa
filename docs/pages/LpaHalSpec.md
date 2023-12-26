@@ -1,7 +1,4 @@
-@mainpage
-
 # LPA HAL Documentation
-
 
 ## Acronyms
 
@@ -47,7 +44,6 @@ Different 3rd party vendors allowed to allocate memory for internal operational 
 TODO:
 State a footprint requirement. Example: This should not exceed XXXX KB.
 
-
 ## Power Management Requirements
 
 The HAL is not involved in any of the power management operation.
@@ -61,6 +57,7 @@ There are no asynchronous notifications.
 
 The API's are expected to work synchronously and should complete within a time period commensurate with the complexity of the operation and in accordance with any relevant specification.
 Any calls that can fail due to the lack of a response should have a timeout period in accordance with any API documentation.
+The upper layers will call this API from a single thread context, this API should not suspend.
 
 TODO:
 As we state that they should complete within a time period, we need to state what that time target is, and pull it from the spec if required. Define the timeout requirement.
@@ -79,11 +76,11 @@ Following non functional requirement should be supported by the component.
 
 ## Logging and debugging requirements
 
-The component is should log all the error and critical informative messages which helps to debug/triage the issues and understand the functional flow of the system.
+The component is should log all the error and critical informative messages, preferably using printf, syslog which helps to debug/triage the issues and understand the functional flow of the system.
 
-The logging should be consistence across all HAL components.
+The logging should be consistent across all HAL components.
 
-If the vendor is going to log then it has to be logged in `xxx_vendor_hal.log` file name which can be placed in `/rdklogs/logs/` directory.
+If the vendor is going to log then it has to be logged in `xxx_vendor_hal.log` file name which can be placed in `/rdklogs/logs/` or `/var/tmp/` directory.
 
 Logging should be defined with log levels as per Linux standard logging.
 
@@ -93,7 +90,7 @@ The component should not contributing more to memory and CPU utilization while p
 
 ## Quality Control
 
-MTA HAL implementation should pass checks using third party tools like `Coverity`, `Black duck`, `Valgrind` without any issue to ensure quality.
+LPA HAL implementation should pass checks using any third party tools like `Coverity`, `Black duck`, `Valgrind` etc. without any issue to ensure quality.
 
 There should not be any memory leaks/corruption introduced by HAL and underneath 3rd party software implementation.
 
@@ -103,7 +100,7 @@ Lpa HAL implementation is expected to released under the Apache License 2.0.
 
 ## Build Requirements
 
-The source code should be build under Linux Yocto environment and should be delivered as a shared library named as `libesim_lpa.la`
+The source code should be able to be built under Linux Yocto environment and should be delivered as a shared library named as `libesim_lpa.la`
   
 ## Variability Management
 
@@ -125,8 +122,6 @@ All HAL function prototypes and datatype definitions are available in `lpa_hal.h
 ## Theory of operation and key concepts
 
 Covered as per "Description" sections in the API documentation.
-
-### UML Diagrams
 
 ## Sequence Diagram
 

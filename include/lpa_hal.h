@@ -112,6 +112,16 @@ typedef  struct
                 FUNCTION PROTOTYPES
 **********************************************************************/
 
+
+/*
+ * TODO:
+ *
+ * 1. Extend the return codes by listing out the possible reasons of failure, to improve the interface in the future.
+ *    This was reported during the review for header file migration to opensource github.
+ *
+ */
+
+
 /**
 * @brief - This callback sends to upper layer about the download progress.
 *
