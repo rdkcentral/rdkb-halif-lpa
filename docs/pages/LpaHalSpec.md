@@ -10,7 +10,13 @@
 ## Description
 The diagram below describes a high-level software architecture of the Lpa HAL module stack. 
 
-![Lpa HAL Architecture Diag](images/Lpa_HAL_Architecture.png)
+```mermaid
+
+flowchart
+    Caller <--> HALIF[HAL Interface - lpa_util_hal.h\n`HAL IF Specifcation / Contract Requirement`]
+    HALIF <--> VendorWrapper[HAL\nVendor Implementation]
+    VendorWrapper <--> VendorDrivers[Vendor Drivers\nImplementation]
+```
 
 Lpa HAL is an abstraction layer, implemented to interact with vendor software's for getting the details of the profiles on the eSIM.
 
@@ -34,12 +40,18 @@ Vendors can create internal threads/events to meet their operation requirements.
 
 ## Process Model
 
-All API's are expected to be called from multiple process.
+API's are expected to be called from multiple process.
 
 ## Memory Model
 
-The client is responsible to allocate and de-allocate memory for necessary API's as specified in API Documentation.
-Different 3rd party vendors allowed to allocate memory for internal operational requirements. In this case 3rd party implementations should be responsible to de-allocate internally.
+### Caller Responsibilities:
+
+Manage memory passed to specific functions as outlined in the API documentation. This includes allocation and proper deallocation to prevent leaks.
+
+### Module Responsibilities:
+
+Handle and deallocate memory used for its internal operations.
+Release all internally allocated memory upon closure to prevent leaks.
 
 TODO:
 State a footprint requirement. Example: This should not exceed XXXX KB.
@@ -47,7 +59,6 @@ State a footprint requirement. Example: This should not exceed XXXX KB.
 ## Power Management Requirements
 
 The HAL is not involved in any of the power management operation.
-Any power management state transitions MUST not affect the operation of the HAL.
 
 ## Asynchronous Notification Model
 
@@ -55,12 +66,13 @@ There are no asynchronous notifications.
 
 ## Blocking calls
 
-The API's are expected to work synchronously and should complete within a time period commensurate with the complexity of the operation and in accordance with any relevant specification.
-Any calls that can fail due to the lack of a response should have a timeout period in accordance with any API documentation.
-The upper layers will call this API from a single thread context, this API should not suspend.
+APIs should operate synchronously and complete quickly. Completion time should be based on the operation's complexity and follow any defined specifications within the API's documentation.
 
-TODO:
-As we state that they should complete within a time period, we need to state what that time target is, and pull it from the spec if required. Define the timeout requirement.
+Implement timeouts for API calls that could fail due to unresponsiveness. Refer to the API documentation for recommended timeout values.
+
+Since this API will be called from a single-threaded environment, it must not block or suspend execution.
+
+TODO: As we state that they should complete within a time period, we need to state what that time target is, and pull it from the spec if required. Define the timeout requirement.
 
 ## Internal Error Handling
 
@@ -76,13 +88,11 @@ Following non functional requirement should be supported by the component.
 
 ## Logging and debugging requirements
 
-The component is should log all the error and critical informative messages, preferably using printf, syslog which helps to debug/triage the issues and understand the functional flow of the system.
+The LPA HAL component must record all errors and critical informative messages. This can be achieved by using either the printf or the syslog method. These tools are useful in identifying, and debugging the issues and understanding the functional flow of the system.
 
-The logging should be consistent across all HAL components.
+It is recommended that each HAL component follows the same logging process. If logging is required, vendors should log in to the `lpa_vendor_hal.log` file, which can be found in the `/var/tmp/` or `/rdklogs/logs/` directories.  
 
-If the vendor is going to log then it has to be logged in `xxx_vendor_hal.log` file name which can be placed in `/rdklogs/logs/` or `/var/tmp/` directory.
-
-Logging should be defined with log levels as per Linux standard logging.
+Logging should be defined with log levels as per Linux standard logging. The logging levels specified by the Linux standard logging, in descending order of severity, are FATAL, ERROR, WARNING, NOTICE, INFO, DEBUG, TRACE.
 
 ## Memory and performance requirements
 
@@ -116,7 +126,7 @@ None
 
 All HAL function prototypes and datatype definitions are available in `lpa_hal.h` file.
     
-1. Components/Process must `lpa_hal.h` to make use of Lpa hal capabilities.
+1. Components/Process must include lpa_hal.h to make use of Lpa hal capabilities.
 2. Components/Process should add linker dependency for `libesim_lpa.la.`
 
 ## Theory of operation and key concepts
