@@ -32,9 +32,9 @@ There is no dependent API's is expected to be intialized for invoking the client
 
 ## Threading Model
 
-The interface is not thread safe.
+The interface is not required to be thread-safe.
 
-Any module which is invoking the API should ensure calls are made in a thread safe manner.
+Any module which is invoking the Lpa Hal API should ensure calls are made in a thread safe manner.
 
 Vendors can create internal threads/events to meet their operation requirements.  These should be responsible to synchronize between the calls, events and cleaned up on closure.
 
@@ -102,7 +102,7 @@ The component should not contributing more to memory and CPU utilization while p
 
 LPA HAL implementation should pass checks using any third party tools like `Coverity`, `Black duck`, `Valgrind` etc. without any issue to ensure quality.
 
-There should not be any memory leaks/corruption introduced by HAL and underneath 3rd party software implementation.
+Both HAL wrapper and 3rd party software implementations should prioritize robust memory management to guarantee leak-free and corruption-resistant operation.
 
 ## Licensing
 
