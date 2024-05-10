@@ -8,7 +8,8 @@
 - `LPA` \- Local Profile Assistants
 
 ## Description
-The diagram below describes a high-level software architecture of the Lpa HAL module stack. 
+
+Lpa HAL is an abstraction layer, implemented to interact with vendor software's for getting the details of the profiles on the eSIM. The diagram below describes a high-level software architecture of the Lpa HAL module stack.
 
 ```mermaid
 
@@ -18,25 +19,21 @@ flowchart
     VendorWrapper <--> VendorDrivers[Vendor Drivers\nImplementation]
 ```
 
-Lpa HAL is an abstraction layer, implemented to interact with vendor software's for getting the details of the profiles on the eSIM.
-
 ## Component Runtime Execution Requirements
 
 ### Initialization and Startup
 
 There is no dependent API's is expected to be intialized for invoking the client module. But below API is used to setup the LPA SDK parameters
+
 - `cellular_esim_lpa_init()`
 
-3rd party vendors will implement appropriately to meet operational requirements. This interface is expected to block if the hardware is not ready.
-
+Third-party vendors must implement the interface to align with operational standards. The interface should block execution if the necessary hardware is unavailable.
 
 ## Threading Model
 
 The interface is not required to be thread-safe.
 
-Any module which is invoking the Lpa Hal API should ensure calls are made in a thread safe manner.
-
-Vendors can create internal threads/events to meet their operation requirements.  These should be responsible to synchronize between the calls, events and cleaned up on closure.
+Vendors can implement internal threading and event mechanisms for operational purposes. These mechanisms must ensure thread safety when interacting with the provided interface. Additionally, they must guarantee cleanup of resources upon closure.
 
 ## Process Model
 
@@ -44,11 +41,11 @@ API's are expected to be called from multiple process.
 
 ## Memory Model
 
-### Caller Responsibilities:
+### Caller Responsibilities
 
 Manage memory passed to specific functions as outlined in the API documentation. This includes allocation and proper deallocation to prevent leaks.
 
-### Module Responsibilities:
+### Module Responsibilities
 
 Handle and deallocate memory used for its internal operations.
 Release all internally allocated memory upon closure to prevent leaks.
@@ -80,7 +77,7 @@ All the Lpa HAL API's should return error synchronously as a return argument. HA
 
 ## Persistence Model
 
-There is no requirement for HAL to persist any setting information. The caller is responsible to persist any settings related to their implementation.
+There is no requirement for HAL to persist any setting information.
 
 ## Nonfunctional requirements
 
@@ -88,11 +85,21 @@ Following non functional requirement should be supported by the component.
 
 ## Logging and debugging requirements
 
-The LPA HAL component must record all errors and critical informative messages. This can be achieved by using either the printf or the syslog method. These tools are useful in identifying, and debugging the issues and understanding the functional flow of the system.
+The LPA HAL component is required to record all errors and critical informative messages to aid in identifying, debugging, and understanding the functional flow of the system. Logging should be implemented using the syslog method, as it provides robust logging capabilities suited for system-level software. The use of printf is discouraged unless syslog is not available.
 
-It is recommended that each HAL component follows the same logging process. If logging is required, vendors should log in to the `lpa_vendor_hal.log` file, which can be found in the `/var/tmp/` or `/rdklogs/logs/` directories.  
+All HAL components must adhere to a consistent logging process. When logging is necessary, it should be performed into the lpa_vendor_hal.log file, which is located in either the /var/tmp/ or /rdklogs/logs/ directories.
 
-Logging should be defined with log levels as per Linux standard logging. The logging levels specified by the Linux standard logging, in descending order of severity, are FATAL, ERROR, WARNING, NOTICE, INFO, DEBUG, TRACE.
+Logs must be categorized according to the following log levels, as defined by the Linux standard logging system, listed here in descending order of severity:
+
+- FATAL: Critical conditions, typically indicating system crashes or severe failures that require immediate attention.
+- ERROR: Non-fatal error conditions that nonetheless significantly impede normal operation.
+- WARNING: Potentially harmful situations that do not yet represent errors.
+- NOTICE: Important but not error-level events.
+- INFO: General informational messages that highlight system operations.
+- DEBUG: Detailed information typically useful only when diagnosing problems.
+- TRACE: Very fine-grained logging to trace the internal flow of the system.
+
+Each log entry should include a timestamp, the log level, and a message describing the event or condition. This standard format will facilitate easier parsing and analysis of log files across different vendors and components.
 
 ## Memory and performance requirements
 
@@ -106,11 +113,11 @@ Both HAL wrapper and 3rd party software implementations should prioritize robust
 
 ## Licensing
 
-Lpa HAL implementation is expected to released under the Apache License 2.0. 
+Lpa HAL implementation is expected to released under the Apache License 2.0.
 
 ## Build Requirements
 
-The source code should be able to be built under Linux Yocto environment and should be delivered as a shared library named as `libesim_lpa.la`
+The source code should be capable of, but not be limited to, building under the Yocto distribution environment. The recipe should deliver a shared library named as `libesim_lpa.so`
   
 ## Variability Management
 
@@ -125,13 +132,36 @@ None
 ## Interface API Documentation
 
 All HAL function prototypes and datatype definitions are available in `lpa_hal.h` file.
-    
+
 1. Components/Process must include lpa_hal.h to make use of Lpa hal capabilities.
-2. Components/Process should add linker dependency for `libesim_lpa.la.`
+2. Components/Process should add linker dependency for `libesim_lpa.so.`
 
 ## Theory of operation and key concepts
 
-Covered as per "Description" sections in the API documentation.
+To provide stakeholders with a comprehensive understanding of how the interfaced components within the LPA HAL function. This understanding is crucial for effective integration and troubleshooting.
+
+### Object Lifecycles
+
+Each object within the LPA HAL component is designed with a specific lifecycle, which details how objects are created, used, and destroyed. The lifecycle management of these objects includes:
+
+- Creation: Objects are instantiated with initial configuration parameters.
+- Usage: Throughout their lifecycle, objects might be re-configured or interacted with through various methods.
+- Destruction: Objects are destroyed when they are no longer needed, freeing up resources. Each object has a unique identifier that remains consistent across its lifecycle, enabling traceable interactions and modifications.
+
+### Method Sequencing
+
+Certain operations within the LPA HAL must occur in a specific sequence to ensure proper functionality:
+
+- Initialization: All primary components must be initialized before they can be configured or used. This process involves setting initial states and loading necessary resources.
+- Configuration: After initialization, components must be configured with specific settings that dictate their operation.
+- Operational Use: Once initialized and configured, components can perform their designated tasks.
+
+### State-Dependent Behavior
+
+The behavior of components in the LPA HAL is dependent on their current state, governed by a state model:
+
+- State Model: A predefined model outlines possible states of the components and the valid transitions between these states.
+- Method Restrictions: Certain methods within the component can only be invoked when the component is in particular states. For example, configuration methods may only be accessible when a component is in an 'uninitialized' or 'idle' state.
 
 ## Sequence Diagram
 
@@ -160,4 +190,3 @@ Caller->>Lpa HAL: cellular_esim_lpa_exit()
 Lpa HAL->>Vendor: 
 Vendor ->>Lpa HAL: 
 Lpa HAL->>Caller: cellular_esim_lpa_exit() return
-```
