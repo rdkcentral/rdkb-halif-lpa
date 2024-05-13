@@ -9,7 +9,19 @@
 
 ## Description
 
-Lpa HAL is an abstraction layer, implemented to interact with vendor software's for getting the details of the profiles on the eSIM. The diagram below describes a high-level software architecture of the Lpa HAL module stack.
+The LPA (Local Profile Assistant) HAL module provides a standardized interface for managing and controlling power states of devices in the RDK ecosystem. It acts as an intermediary between the power management software and the underlying hardware, simplifying the complexities associated with different power states and transitions.
+
+### Key Functionalities of the LPA HAL
+
+- **Power State Management:** Enables transitioning between various power states (e.g., active, standby, sleep) based on system requirements and user preferences.
+- **Wake Events:** Configures and handles wake-up events from multiple sources like timers, network activity, or external triggers.
+- **Resource Control:** Allows control over device resources during different power states (e.g., disabling unused components, adjusting clock speeds) to optimize power consumption.
+- **Monitoring:** Monitors power-related parameters like battery level, current consumption, and temperature to ensure safe and efficient operation.
+- **Notifications:** Provides notifications to applications about changes in power state or other power-related events.
+  
+With this abstraction, the LPA HAL enhances the development of power-aware applications, offering greater flexibility in managing device power consumption, which leads to improved energy efficiency, extended battery life (in battery-powered devices), and an enhanced user experience.
+
+The diagram below illustrates the high-level software architecture of the Lpa HAL module stack, demonstrating how it fits within the broader system context.
 
 ```mermaid
 
@@ -73,7 +85,9 @@ TODO: As we state that they should complete within a time period, we need to sta
 
 ## Internal Error Handling
 
-All the Lpa HAL API's should return error synchronously as a return argument. HAL is responsible to handle system errors(e.g. out of memory) internally.
+- **Synchronous Error Handling:** All APIs must return errors synchronously as a return value. This ensures immediate notification of errors to the caller.
+- **Internal Error Reporting:** The HAL is responsible for reporting any internal system errors (e.g., out-of-memory conditions) through the return value.
+- **Focus on Logging for Errors:** For system errors, the HAL should prioritize logging the error details for further investigation and resolution.
 
 ## Persistence Model
 
@@ -91,13 +105,13 @@ All HAL components must adhere to a consistent logging process. When logging is 
 
 Logs must be categorized according to the following log levels, as defined by the Linux standard logging system, listed here in descending order of severity:
 
-- FATAL: Critical conditions, typically indicating system crashes or severe failures that require immediate attention.
-- ERROR: Non-fatal error conditions that nonetheless significantly impede normal operation.
-- WARNING: Potentially harmful situations that do not yet represent errors.
-- NOTICE: Important but not error-level events.
-- INFO: General informational messages that highlight system operations.
-- DEBUG: Detailed information typically useful only when diagnosing problems.
-- TRACE: Very fine-grained logging to trace the internal flow of the system.
+- **FATAL:** Critical conditions, typically indicating system crashes or severe failures that require immediate attention.
+- **ERROR:** Non-fatal error conditions that nonetheless significantly impede normal operation.
+- **WARNING:** Potentially harmful situations that do not yet represent errors.
+- **NOTICE:** Important but not error-level events.
+- **INFO:** General informational messages that highlight system operations.
+- **DEBUG:** Detailed information typically useful only when diagnosing problems.
+- **TRACE:** Very fine-grained logging to trace the internal flow of the system.
 
 Each log entry should include a timestamp, the log level, and a message describing the event or condition. This standard format will facilitate easier parsing and analysis of log files across different vendors and components.
 
@@ -107,9 +121,7 @@ The component should not contributing more to memory and CPU utilization while p
 
 ## Quality Control
 
-LPA HAL implementation should pass checks using any third party tools like `Coverity`, `Black duck`, `Valgrind` etc. without any issue to ensure quality.
-
-Both HAL wrapper and 3rd party software implementations should prioritize robust memory management to guarantee leak-free and corruption-resistant operation.
+To ensure the highest quality and reliability, it is strongly recommended that third-party quality assurance tools like `Coverity`, `Black Duck`, and `Valgrind` be employed to thoroughly analyze the implementation. The goal is to detect and resolve potential issues such as memory leaks, memory corruption, or other defects before deployment.
 
 ## Licensing
 
@@ -144,24 +156,24 @@ To provide stakeholders with a comprehensive understanding of how the interfaced
 
 Each object within the LPA HAL component is designed with a specific lifecycle, which details how objects are created, used, and destroyed. The lifecycle management of these objects includes:
 
-- Creation: Objects are instantiated with initial configuration parameters.
-- Usage: Throughout their lifecycle, objects might be re-configured or interacted with through various methods.
-- Destruction: Objects are destroyed when they are no longer needed, freeing up resources. Each object has a unique identifier that remains consistent across its lifecycle, enabling traceable interactions and modifications.
+- **Creation:** Objects are instantiated with initial configuration parameters.
+- **Usage:** Throughout their lifecycle, objects might be re-configured or interacted with through various methods.
+- **Destruction:** Objects are destroyed when they are no longer needed, freeing up resources. Each object has a unique identifier that remains consistent across its lifecycle, enabling traceable interactions and modifications.
 
 ### Method Sequencing
 
 Certain operations within the LPA HAL must occur in a specific sequence to ensure proper functionality:
 
-- Initialization: All primary components must be initialized before they can be configured or used. This process involves setting initial states and loading necessary resources.
-- Configuration: After initialization, components must be configured with specific settings that dictate their operation.
-- Operational Use: Once initialized and configured, components can perform their designated tasks.
+- **Initialization:** All primary components must be initialized before they can be configured or used. This process involves setting initial states and loading necessary resources.
+- **Configuration:** After initialization, components must be configured with specific settings that dictate their operation.
+- **Operational Use:** Once initialized and configured, components can perform their designated tasks.
 
 ### State-Dependent Behavior
 
 The behavior of components in the LPA HAL is dependent on their current state, governed by a state model:
 
-- State Model: A predefined model outlines possible states of the components and the valid transitions between these states.
-- Method Restrictions: Certain methods within the component can only be invoked when the component is in particular states. For example, configuration methods may only be accessible when a component is in an 'uninitialized' or 'idle' state.
+- **State Model:** A predefined model outlines possible states of the components and the valid transitions between these states.
+- **Method Restrictions:** Certain methods within the component can only be invoked when the component is in particular states. For example, configuration methods may only be accessible when a component is in an 'uninitialized' or 'idle' state.
 
 ## Sequence Diagram
 
