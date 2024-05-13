@@ -26,7 +26,7 @@ The diagram below illustrates the high-level software architecture of the Lpa HA
 ```mermaid
 
 flowchart
-    Caller <--> HALIF[HAL Interface - lpa_util_hal.h\n`HAL IF Specifcation / Contract Requirement`]
+    Caller <--> HALIF[HAL Interface - lpa_hal.h\n`HAL IF Specifcation / Contract Requirement`]
     HALIF <--> VendorWrapper[HAL\nVendor Implementation]
     VendorWrapper <--> VendorDrivers[Vendor Drivers\nImplementation]
 ```
