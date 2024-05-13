@@ -34,10 +34,7 @@
  * This enumeration defines the possible value for preferred UICC.
  */
 /*
- * TODO: This module must re-structre it's naming convention for all types
- *       CellularPreferredUICC_t -> LPA_HAL_CellularPreferredUICC_t
- *       CELLULAR_UICC_USIM -> LPA_HAL_CELLULAR_UICC_USIM
- *       etc. everywhere.
+ * TODO: This module must re-structre it's naming convention for all types.
  */
 typedef enum _Cellular_PreferredUICC_t
 {
