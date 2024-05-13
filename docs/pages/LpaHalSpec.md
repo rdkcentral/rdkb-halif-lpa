@@ -99,9 +99,9 @@ Following non functional requirement should be supported by the component.
 
 ## Logging and debugging requirements
 
-The LPA HAL component is required to record all errors and critical informative messages to aid in identifying, debugging, and understanding the functional flow of the system. Logging should be implemented using the syslog method, as it provides robust logging capabilities suited for system-level software. The use of printf is discouraged unless syslog is not available.
+The LPA HAL component is required to record all errors and critical informative messages to aid in identifying, debugging, and understanding the functional flow of the system. Logging should be implemented using the `syslog` method, as it provides robust logging capabilities suited for system-level software. The use of printf is discouraged unless syslog is not available.
 
-All HAL components must adhere to a consistent logging process. When logging is necessary, it should be performed into the lpa_vendor_hal.log file, which is located in either the /var/tmp/ or /rdklogs/logs/ directories.
+All HAL components must adhere to a consistent logging process. When logging is necessary, it should be performed into the `lpa_vendor_hal.log` file, which is located in either the `/var/tmp/` or `/rdklogs/logs/` directories.
 
 Logs must be categorized according to the following log levels, as defined by the Linux standard logging system, listed here in descending order of severity:
 
