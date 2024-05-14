@@ -35,11 +35,17 @@ flowchart
 
 ### Initialization and Startup
 
-There is no dependent API's is expected to be intialized for invoking the client module. But below API is used to setup the LPA SDK parameters
+The Cellular eSIM LPA SDK does not require any external API dependencies for initialization. However, the `cellular_esim_lpa_init()` function is essential for setting up the SDK's parameters and preparing it for operation.
 
 - `cellular_esim_lpa_init()`
 
-Third-party vendors must implement the interface to align with operational standards. The interface should block execution if the necessary hardware is unavailable.
+This function is mandatory and must be called before any other functions in the LPA SDK.
+
+#### Responsibilities of Third-Party Vendors:
+
+- **Implementation:** Vendors are responsible for providing a concrete implementation of the `cellular_esim_lpa_init()` function.
+- **Hardware Availability Check:** The implementation must check if the necessary hardware (e.g., eUICC chip, modem) is present and functional.
+- **Blocking Behaviour:** If the required hardware is unavailable, the `cellular_esim_lpa_init()` function must block further execution until the hardware becomes available. This ensures that subsequent SDK operations do not fail due to missing or unprepared hardware.
 
 ## Threading Model
 
