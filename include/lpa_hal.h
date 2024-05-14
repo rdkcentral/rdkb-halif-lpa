@@ -17,7 +17,7 @@
  * limitations under the License.
 */
 
-/**
+/**!
 * @file lpa_hal.h
 * @brief The lpa hal provides function call prototypes and structure definitions used for the  LPA hardware abstraction layer.
 *
@@ -29,7 +29,7 @@
 /**********************************************************************
                 ENUMERATION DEFINITIONS
 **********************************************************************/
-/**
+/**!
  * @brief Represents the preferred UICC (Universal Integrated Circuit Card) type.
  * This enumeration defines the possible value for preferred UICC.
  */
@@ -42,7 +42,7 @@ typedef enum _Cellular_PreferredUICC_t
     CELLULAR_UICC_ESIM,          /**< Universal Integrated Circuit Card with embedded SIM*/
 } CellularPreferredUICC_t;
 
-/**
+/**!
  * @brief Represents the status of the cellular device sim.
  *
  * This enumeration provides the values for different status of sim in the cellular devices.  
@@ -58,7 +58,7 @@ typedef enum _CellularDeviceSimStatus_t
 /**********************************************************************
                 STRUCTURE AND CONSTANT DEFINITIONS
 **********************************************************************/
-/**
+/**!
 * @defgroup lpa_hal LPA HAL
 *
 * @defgroup LPA_HAL_TYPES  LPA HAL Data Types
@@ -69,7 +69,7 @@ typedef enum _CellularDeviceSimStatus_t
 *
 **/
 
-/**
+/**!
 * @addtogroup LPA_HAL_TYPES
 * @{
 */
@@ -84,7 +84,8 @@ typedef enum _CellularDeviceSimStatus_t
 #endif
 
 /
-/** @brief Represents an eSIM profile. 
+/**! 
+ * @brief Represents an eSIM profile. 
  *  Stores profile data, including ICCID, state (enabled/disabled), and name.
  */
 typedef  struct
@@ -94,11 +95,11 @@ typedef  struct
     char profileName[16];    /**<! Profile name (e.g., "Xfinity Mobile", "Comcast", "CRTC"). */
 } eSIMProfileStruct;
 
-/**
+/**!
 * @}
 */
 
-/**
+/**!
 * @addtogroup LPA_HAL_APIS
 * @{
 */
@@ -114,7 +115,8 @@ typedef  struct
  *
  */
 
-/** @brief Provides progress updates for eSIM profile download. 
+/**!
+ * @brief Provides progress updates for eSIM profile download. 
  *
  * This callback function is called with status messages indicating each stage of the eSIM profile download process, from initiating authentication to the final download.
  *
@@ -126,7 +128,7 @@ typedef  struct
  */
 typedef int (*cellular_sim_download_progress_callback)( char *progress );
 
-/**
+/**!
 * @brief Downloads the eSIM profile using a provided activation code.
 *
 * Initiates the download and installation of an eSIM profile. Uses a callback to communicate download progress and status back to the caller.
@@ -142,7 +144,8 @@ typedef int (*cellular_sim_download_progress_callback)( char *progress );
 */
 int cellular_esim_download_profile_with_activationcode(char* ActivationCodeStr, cellular_sim_download_progress_callback download_progress);
 
-/** @brief Downloads an eSIM profile from an SMDS address. 
+/**!
+* @brief Downloads an eSIM profile from an SMDS address. 
 *
 * Initiates profile download by connecting to the specified SMDS server.
 *
@@ -154,7 +157,8 @@ int cellular_esim_download_profile_with_activationcode(char* ActivationCodeStr, 
 */
 int cellular_esim_download_profile_from_smds(char* smds);
 
-/** @brief Downloads an eSIM profile from a default SMDP+ address. 
+/**!
+* @brief Downloads an eSIM profile from a default SMDP+ address. 
 *
 * Initiates profile download from a predefined SMDP+ address. SMDP+ is used for secure eSIM profile delivery.
 *
@@ -166,7 +170,8 @@ int cellular_esim_download_profile_from_smds(char* smds);
 */
 int cellular_esim_download_profile_from_defaultsmdp(char* smdp);
 
-/** @brief Retrieves a list of MNO profiles from the eSIM.
+/**!
+* @brief Retrieves a list of MNO profiles from the eSIM.
 *
 * Fetches information about available MNO profiles, providing a list and profile count. The function allocates memory for profile data.
 * 
@@ -179,7 +184,8 @@ int cellular_esim_download_profile_from_defaultsmdp(char* smdp);
 */
 int cellular_esim_get_profile_info(eSIMProfileStruct **profile_list, int *nb_profiles);
 
-/** @brief Enables a Mobile Network Operator (MNO) profile matching the provided ICCID.
+/**! 
+* @brief Enables a Mobile Network Operator (MNO) profile matching the provided ICCID.
 *
 * Activates the eSIM profile corresponding to the given ICCID.  Verifies the ICCID against stored profiles.
 *
@@ -191,7 +197,8 @@ int cellular_esim_get_profile_info(eSIMProfileStruct **profile_list, int *nb_pro
 */
 int cellular_esim_enable_profile(char* iccid, int iccid_size);
 
-/** @brief Disables an eSIM profile matching the provided ICCID.
+/**! 
+* @brief Disables an eSIM profile matching the provided ICCID.
 *
 * Deactivates the eSIM profile with the specified Integrated Circuit Card Identification (ICCID). The ICCID must match exactly for successful disabling.
 *
@@ -203,7 +210,8 @@ int cellular_esim_enable_profile(char* iccid, int iccid_size);
 */
 int cellular_esim_disable_profile(char* iccid, int iccid_size);
 
-/** @brief Deletes an eSIM profile matching the specified ICCID.
+/**! 
+* @brief Deletes an eSIM profile matching the specified ICCID.
 *
 * Permanently removes the eSIM profile with the provided Integrated Circuit Card Identification (ICCID). The ICCID must match exactly for successful deletion.
 *
@@ -215,7 +223,8 @@ int cellular_esim_disable_profile(char* iccid, int iccid_size);
 */
 int cellular_esim_delete_profile(char* iccid, int iccid_size);
 
-/** @brief Initializes the Local Profile Assistant (LPA) for eSIM management.
+/**!
+* @brief Initializes the Local Profile Assistant (LPA) for eSIM management.
 *
 * Configures the LPA module, establishes modem readiness, and sets up dependencies and parameters for eSIM operations.
 *
@@ -225,7 +234,8 @@ int cellular_esim_delete_profile(char* iccid, int iccid_size);
 */
 int cellular_esim_lpa_init(void);
 
-/** @brief Cleans up the Local Profile Assistant (LPA) for eSIM management.
+/**! 
+* @brief Cleans up the Local Profile Assistant (LPA) for eSIM management.
 *
 * Deactivates the LPA module, releasing resources.  Call this before shutdown or when LPA functionality is no longer needed. 
 *
@@ -235,7 +245,8 @@ int cellular_esim_lpa_init(void);
 */
 int cellular_esim_lpa_exit(void);
 
-/** @brief Retrieves the EID (eUICC Identifier) from the device's eSIM.
+/**! 
+* @brief Retrieves the EID (eUICC Identifier) from the device's eSIM.
 *
 * Fetches the unique identifier of the embedded SIM, essential for managing eSIM profiles and subscriptions.
 *
@@ -245,7 +256,8 @@ int cellular_esim_lpa_exit(void);
 */
 int cellular_esim_get_eid();
 
-/** @brief Fetches information about the embedded Universal Integrated Circuit Card (eUICC).
+/**!
+* @brief Fetches information about the embedded Universal Integrated Circuit Card (eUICC).
 *
 * Retrieves details from the eUICC (or eSIM), providing data necessary for managing mobile subscriptions.
 *
@@ -256,6 +268,6 @@ int cellular_esim_get_eid();
 int cellular_esim_get_euicc();
 #endif //_LPA_HAL_H_
 
-/**
+/**!
 * @}
 */
