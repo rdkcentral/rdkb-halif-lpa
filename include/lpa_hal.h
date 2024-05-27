@@ -83,6 +83,7 @@ typedef enum _CellularDeviceSimStatus_t
 #define FALSE               (0)
 #endif
 
+/
 /**! 
  * @brief Represents an eSIM profile. 
  *  Stores profile data, including ICCID, state (enabled/disabled), and name.
